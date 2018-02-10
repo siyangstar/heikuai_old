@@ -1,8 +1,8 @@
 package com.cqsynet.swifi.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,12 +14,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cqsynet.swifi.R;
+import com.cqsynet.swifi.common.AppConstants;
+import com.cqsynet.swifi.common.Globals;
+import com.cqsynet.swifi.model.LoginRequestBody;
+import com.cqsynet.swifi.model.ResponseHeader;
+import com.cqsynet.swifi.model.UserInfo;
+import com.cqsynet.swifi.model.UserInfoResponseObject;
+import com.cqsynet.swifi.network.WebServiceIf;
+import com.cqsynet.swifi.network.WebServiceIf.IResponseCallback;
+import com.cqsynet.swifi.util.Md5Util;
 import com.cqsynet.swifi.util.PhoneNumberUtil;
+import com.cqsynet.swifi.util.SharedPreferencesInfo;
+import com.cqsynet.swifi.util.ToastUtil;
+import com.google.gson.Gson;
 
 /**
  * 登录界面
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private TextInputLayout mTilUsername;
     private TextInputLayout mTilPassword;
@@ -126,6 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void attemptLogin() {
         if(checkUsername() && checkPassword()) {
             hideInput(mBtnLogin);
+            login(mAtvUsername.getText().toString(), mEtPassword.getText().toString());
         }
     }
 
@@ -134,6 +147,69 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (inputMethodManager != null) {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    /**
+     * @param phoneNum 要登陆的电话号码
+     * @param psw      登陆密码
+     * @Description: 调用登陆接口发起登陆，并处理服务器返回信息
+     * @return: void
+     */
+    private void login(String phoneNum, String psw) {
+        mProgressDialog.setMessage(getString(R.string.logining));
+        mProgressDialog.show();
+        final LoginRequestBody loginRequestBody = new LoginRequestBody();
+        loginRequestBody.phoneNo = phoneNum;
+        loginRequestBody.password = Md5Util.MD5(psw);
+        loginRequestBody.rsaPubKey = "";
+        IResponseCallback loginCallbackIf = new IResponseCallback() {
+            @Override
+            public void onResponse(String response) {
+                if (response != null) {
+                    Gson gson = new Gson();
+                    UserInfoResponseObject responseObj = gson.fromJson(response, UserInfoResponseObject.class);
+                    ResponseHeader header = responseObj.header;
+                    if (header != null) {
+                        if (AppConstants.RET_OK.equals(header.ret)) {
+                            try {
+                                UserInfo body = responseObj.body;
+                                if (!TextUtils.isEmpty(body.userAccount) && !TextUtils.isEmpty(body.rsaPubKey)) {
+                                    SharedPreferencesInfo.setTagString(LoginActivity.this,
+                                            SharedPreferencesInfo.PHONE_NUM, loginRequestBody.phoneNo);
+                                    SharedPreferencesInfo.setTagString(LoginActivity.this,
+                                            SharedPreferencesInfo.ACCOUNT, body.userAccount);
+                                    SharedPreferencesInfo.setTagString(LoginActivity.this,
+                                            SharedPreferencesInfo.RSA_KEY, body.rsaPubKey);
+                                    SharedPreferencesInfo.setTagInt(LoginActivity.this,
+                                            SharedPreferencesInfo.IS_LOGIIN, 1);
+                                    Globals.g_userInfo = body;
+                                    SharedPreferencesInfo.setTagString(LoginActivity.this, SharedPreferencesInfo.USER_INFO, gson.toJson(body));
+                                    Globals.g_tempPriSign = ""; //清空签名,重新生成
+                                    Intent broadcast = new Intent(AppConstants.ACTION_SOCKET_LOGIN);
+                                    sendBroadcast(broadcast);
+                                    Intent home = new Intent(LoginActivity.this, HomeActivity.class);
+                                    startActivity(home);
+                                    LoginActivity.this.finish();
+                                }
+                            } catch (ClassCastException e) {
+                                ToastUtil.showToast(LoginActivity.this, R.string.login_fail);
+                            }
+                        } else {
+                            ToastUtil.showToast(LoginActivity.this, header.errMsg);
+                        }
+                    }
+                }
+                mProgressDialog.dismiss();
+            }
+
+            @Override
+            public void onErrorResponse() {
+                ToastUtil.showToast(LoginActivity.this, R.string.login_fail);
+                mProgressDialog.dismiss();
+            }
+        };
+        // 调用接口发起登陆
+        WebServiceIf.login(this, loginRequestBody, loginCallbackIf);
     }
 }
 

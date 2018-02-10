@@ -14,6 +14,7 @@
     <string name="password">密码</string>
     <string name="phonenum_empty">请输入您的手机号</string>
     <string name="password_empty">请输入您的密码</string>
+    <string name="logining">登录中,请稍候...</string>
     <string name="input_verification_code">请输入验证码</string>
     <string name="input_new_psw">请输入6~18位新密码</string>
     <string name="input_old_psw">请输入旧密码</string>
