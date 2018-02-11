@@ -90,7 +90,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnLogin_activity_login:
-                attemptLogin();
+//                attemptLogin();
+                login("18680933386", "111111");
                 break;
             case R.id.btnForgotPassword_activity_login:
                 break;
