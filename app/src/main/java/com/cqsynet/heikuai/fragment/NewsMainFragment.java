@@ -76,7 +76,7 @@ public class NewsMainFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("channelId", channelInfo.id);
             fragment.setArguments(bundle);
-            fragments.add(new NewsListFragment());
+            fragments.add(fragment);
         }
 
 //        titles.add("推荐");

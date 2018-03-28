@@ -40,4 +40,12 @@
     <dimen name="big_activity_fab_margin">16dp</dimen>
     <dimen name="big_activity_text_margin">16dp</dimen>
 
+    <dimen name="text_size_largexx">20sp</dimen>
+    <dimen name="text_size_largex">18sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_mediumx">14sp</dimen>
+    <dimen name="text_size_medium">13sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_small2">10sp</dimen>
+
 </resources>

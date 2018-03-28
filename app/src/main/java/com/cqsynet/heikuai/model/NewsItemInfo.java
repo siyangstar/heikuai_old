@@ -17,7 +17,6 @@ public class NewsItemInfo {
     public String type; // 按新闻内容来区分的类型。包括 活动，专题，广告，等类型
 
     public String title; // 新闻标题
-    public String content; // 新闻内容摘要
     public String author; // 新闻来源
     public String template; // 新闻列表项View类型。有右侧图片文字混排，纯文本，一张水平大图，三张并排小图，广告灯类型。
     public String label; //新闻标签
