@@ -4,10 +4,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/news_item_bg_selector"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="10dp">
+    android:paddingBottom="12dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="12dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,12 +26,13 @@
             android:id="@+id/tvNewsTitle_small_photo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/ivNewsThumbnail_small_photo"
             android:lines="3"
             android:text="这是标题"
             android:textColor="@color/text1"
-            android:textSize="17sp" />
+            android:textSize="@dimen/text_size_mediumxx"
+            android:textStyle="bold" />
 
         <include
             android:id="@+id/llNewsInfo_small_photo"
@@ -40,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/tvNewsTitle_small_photo"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/ivNewsThumbnail_small_photo" />
 
     </RelativeLayout>

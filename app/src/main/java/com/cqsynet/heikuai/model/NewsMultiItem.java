@@ -40,4 +40,15 @@ public class NewsMultiItem implements MultiItemEntity {
             return 1;
         }
     }
+
+    /**
+     * 轮播下一个
+     */
+    public void turnToNext() {
+        if(newsItemList != null && newsItemList.size() > 0) {
+            index = ++index % newsItemList.size();
+        } else {
+            index = 0;
+        }
+    }
 }

@@ -27,6 +27,7 @@ import com.cqsynet.heikuai.view.MyLoadMoreView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class NewsListFragment extends Fragment{
 
@@ -58,6 +59,7 @@ public class NewsListFragment extends Fragment{
         mNewsAdapter = new NewsItemAdapter(mNewsMultiItemList);
         mNewsAdapter.setEnableLoadMore(true);
         mNewsAdapter.setLoadMoreView(new MyLoadMoreView());
+        mRecyclerView.setAdapter(mNewsAdapter);
         mNewsAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -86,7 +88,16 @@ public class NewsListFragment extends Fragment{
                         }
             }
         }, mRecyclerView);
-        mRecyclerView.setAdapter(mNewsAdapter);
+
+        mNewsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                NewsMultiItem newsMultiItem = (NewsMultiItem) adapter.getItem(position);
+                NewsMultiItem.NewsItem newsItem = newsMultiItem.newsItemList.get(newsMultiItem.index);
+                ToastUtil.showToast(getActivity(), newsItem.url);
+            }
+        });
+
 
         return view;
     }
@@ -283,6 +294,7 @@ public class NewsListFragment extends Fragment{
                 }
                 newsItem.img = newsInfo.img;
                 newsMultiItem.newsItemList.add(newsItem);
+                newsMultiItem.index = 0;
             } else { //广告类型
                 int size = newsInfo.advId.size();
                 for (int i = 0; i < size; i++) {
@@ -303,7 +315,7 @@ public class NewsListFragment extends Fragment{
                     newsItem.img = newsInfo.advImg.get(i);
                     newsMultiItem.newsItemList.add(newsItem);
                 }
-
+                newsMultiItem.index = new Random().nextInt(size);
             }
             newsMultiItemList.add(newsMultiItem);
         }

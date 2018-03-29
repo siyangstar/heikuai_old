@@ -1,9 +1,9 @@
 package com.cqsynet.heikuai.adapter;
 
 import android.text.TextUtils;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -41,6 +41,7 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, NewsMultiItem newsMultiItem) {
+        newsMultiItem.turnToNext();
         NewsMultiItem.NewsItem newsItem = newsMultiItem.newsItemList.get(newsMultiItem.index);
         switch (helper.getItemViewType()) {
             case ITEM_VIEW_TYPE_SMALL_PHOTO:
@@ -58,6 +59,7 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                         GlideApp.with(mContext)
                                 .load(imgUrl)
                                 .centerCrop()
+                                .transform(new RoundedCorners(6))
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .error(R.drawable.image_bg)
                                 .into((ImageView) helper.getView(R.id.ivNewsThumbnail_small_photo));
@@ -65,7 +67,12 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                 }
                 break;
             case ITEM_VIEW_TYPE_3PHOTO:
-                helper.setText(R.id.tvNewsTitle_3photo, newsItem.title);
+                if(!TextUtils.isEmpty(newsItem.title)) {
+                    helper.setText(R.id.tvNewsTitle_3photo, newsItem.title);
+                    helper.setGone(R.id.tvNewsTitle_3photo, true);
+                } else {
+                    helper.setGone(R.id.tvNewsTitle_3photo, false);
+                }
                 helper.setText(R.id.tvNewsSource_news_info, newsItem.author);
                 if(!TextUtils.isEmpty(newsItem.label)) {
                     helper.setText(R.id.tvNewsType_news_info, newsItem.label);
@@ -81,6 +88,7 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                             GlideApp.with(mContext)
                                     .load(imgUrl)
                                     .centerCrop()
+                                    .transform(new RoundedCorners(6))
                                     .transition(DrawableTransitionOptions.withCrossFade())
                                     .error(R.drawable.image_bg)
                                     .into((ImageView) helper.getView(R.id.ivNewsThumbnail1_3photo));
@@ -92,6 +100,7 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                             GlideApp.with(mContext)
                                     .load(imgUrl)
                                     .centerCrop()
+                                    .transform(new RoundedCorners(6))
                                     .transition(DrawableTransitionOptions.withCrossFade())
                                     .error(R.drawable.image_bg)
                                     .into((ImageView) helper.getView(R.id.ivNewsThumbnail2_3photo));
@@ -103,6 +112,7 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                             GlideApp.with(mContext)
                                     .load(imgUrl)
                                     .centerCrop()
+                                    .transform(new RoundedCorners(6))
                                     .transition(DrawableTransitionOptions.withCrossFade())
                                     .error(R.drawable.image_bg)
                                     .into((ImageView) helper.getView(R.id.ivNewsThumbnail3_3photo));
@@ -111,7 +121,12 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                 }
                 break;
             default:
-                helper.setText(R.id.tvNewsTitle_vertical, newsItem.title);
+                if(!TextUtils.isEmpty(newsItem.title)) {
+                    helper.setText(R.id.tvNewsTitle_vertical, newsItem.title);
+                    helper.setGone(R.id.tvNewsTitle_vertical, true);
+                } else {
+                    helper.setGone(R.id.tvNewsTitle_vertical, false);
+                }
                 helper.setText(R.id.tvNewsSource_news_info, newsItem.author);
                 if(!TextUtils.isEmpty(newsItem.label)) {
                     helper.setText(R.id.tvNewsType_news_info, newsItem.label);
@@ -124,6 +139,7 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                     if(!TextUtils.isEmpty(imgUrl)) {
                         GlideApp.with(mContext)
                                 .load(imgUrl)
+                                .transform(new RoundedCorners(6))
                                 .transition(DrawableTransitionOptions.withCrossFade())
                                 .error(R.drawable.image_bg)
                                 .into((ImageView) helper.getView(R.id.ivNewsPhoto_vertical));
@@ -131,11 +147,5 @@ public class NewsItemAdapter extends BaseMultiItemQuickAdapter<NewsMultiItem, Ba
                 }
                 break;
         }
-    }
-
-    @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        System.out.println("@@@@@@@@@@@@@@@    " + viewType);
-        return super.onCreateViewHolder(parent, viewType);
     }
 }
