@@ -4,10 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/news_item_bg_selector"
     android:orientation="vertical"
-    android:paddingBottom="12dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="12dp">
+    android:padding="12dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,35 +12,38 @@
 
         <ImageView
             android:id="@+id/ivNewsThumbnail_small_photo"
-            android:layout_width="117dp"
+            android:layout_width="110dp"
             android:layout_height="78dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:scaleType="fitXY" />
 
-        <TextView
-            android:id="@+id/tvNewsTitle_small_photo"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@id/ivNewsThumbnail_small_photo"
-            android:lines="3"
-            android:text="这是标题"
-            android:textColor="@color/text1"
-            android:textSize="@dimen/text_size_mediumxx"
-            android:textStyle="bold" />
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
 
-        <include
-            android:id="@+id/llNewsInfo_small_photo"
-            layout="@layout/news_item_news_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/tvNewsTitle_small_photo"
-            android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@id/ivNewsThumbnail_small_photo" />
+            <TextView
+                android:id="@+id/tvNewsTitle_small_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:text="这是标题"
+                android:textColor="@color/text1"
+                android:textSize="@dimen/text_size_mediumxx"
+                android:textStyle="bold" />
 
+            <include
+                android:id="@+id/llNewsInfo_small_photo"
+                layout="@layout/news_item_news_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
     </RelativeLayout>
 
     <include
